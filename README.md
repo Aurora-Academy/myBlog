@@ -29,4 +29,5 @@ Steps
    JWT_SECRET=password
    ```
 
-9. Run the server application using `npm run dev`
+9. In the terminal inside the server folder, Run the following command `npm install`
+10. Run the server application using `npm run dev`
