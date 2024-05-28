@@ -2,8 +2,10 @@ import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
+import ForgetPassword from "./pages/ForgetPassword";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import VerifyPassword from "./pages/VerifyPassword";
 
 function App() {
   return (
@@ -11,6 +13,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forget-password" element={<ForgetPassword />} />
+        <Route path="/verify-password" element={<VerifyPassword />} />
         <Route path="/register" element={<Register />} />
         {/* Error Routing */}
         <Route path="*" element={<NotFound />} />
