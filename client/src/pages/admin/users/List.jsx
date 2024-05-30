@@ -87,9 +87,7 @@ const List = () => {
               <div className="d-flex justify-content-center d-grid gap-2">
                 <ul className="pagination">
                   <select className="page-item">
-                    <option value="5" selected>
-                      5
-                    </option>
+                    <option value="5">5</option>
                     <option value="10">10</option>
                     <option value="20">20</option>
                   </select>

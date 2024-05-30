@@ -1,7 +1,12 @@
 import React from "react";
+import useBlog from "../hooks/useBlog";
 
 const Blogs = () => {
-  return <div>Blogs</div>;
+  const { data, loading, error, msg } = useBlog({});
+
+  return (
+    <div className="mt-5">{JSON.stringify({ data, loading, error, msg })}</div>
+  );
 };
 
 export default Blogs;

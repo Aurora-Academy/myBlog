@@ -1,16 +1,24 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Dropdown } from "react-bootstrap";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { removeToken } from "../utils/token";
 import Logo from "../assets/logo.png";
 
 const AdminNavbar = () => {
+  const navigate = useNavigate();
   const { pathname } = useLocation();
+
+  const handleLogOut = () => {
+    removeToken();
+    navigate("/login");
+  };
+
   return (
     <>
-      <div className="col-md-3 border" style={{ maxWidth: "250px" }}>
+      <div className="col-md-3 border" style={{ maxWidth: "220px" }}>
         <div
           className="d-flex flex-column p-3 vh-100"
-          style={{ width: "250px" }}
+          style={{ width: "220px" }}
         >
           <Link
             to="/admin"
@@ -45,10 +53,8 @@ const AdminNavbar = () => {
             <li>
               <Link
                 to="/admin/blogs"
-                className={`${
-                  pathname.includes("blogs")
-                    ? "nav-link link-body-emphasis text-light active"
-                    : "nav-link link-body-emphasis"
+                className={`nav-link link-body-emphasis ${
+                  pathname.includes("blogs") ? "text-light active" : ""
                 }`}
               >
                 <i className="fa fa-book"></i>
@@ -57,13 +63,8 @@ const AdminNavbar = () => {
             </li>
           </ul>
           <hr />
-          <div className="dropdown">
-            <Link
-              to="#"
-              className="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
+          <Dropdown>
+            <Dropdown.Toggle variant="light">
               <img
                 src="https://github.com/mdo.png"
                 alt=""
@@ -72,23 +73,14 @@ const AdminNavbar = () => {
                 className="rounded-circle me-2"
               />
               <strong className="text-dark">mdo</strong>
-            </Link>
-            <ul className="dropdown-menu text-small shadow">
-              <li>
-                <Link className="dropdown-item" to="#">
-                  Profile
-                </Link>
-              </li>
-              <li>
-                <hr className="dropdown-divider" />
-              </li>
-              <li>
-                <Link className="dropdown-item" to="#">
-                  Sign out
-                </Link>
-              </li>
-            </ul>
-          </div>
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu>
+              <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+              <Dropdown.Divider />
+              <Dropdown.Item onClick={handleLogOut}>Sign Out</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         </div>
       </div>
     </>

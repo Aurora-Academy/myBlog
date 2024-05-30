@@ -1,8 +1,21 @@
-# React + Vite
+blogs page (blogs aune vaneko k ho??)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+requirement
 
-Currently, two official plugins are available:
+1. API
+2. We will use blogs data in multiple places (home/ blogs) => useContext
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+Client
+0. constants
+1. services
+2. useBlogs hook
+
+User
+3. useContext hook (BlogContext)
+4. Blogs Page
+5. Home Page
+
+Admin
+6. redux Toolkit (blog store)
+7. Blog list
