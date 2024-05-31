@@ -19,6 +19,13 @@ app.use(morgan("dev"));
 app.use(express.json()); // to allow json as request body
 app.use("/assets", express.static("public"));
 
+// Intentional delay to test loading
+// app.use((req, res, next) => {
+//   setTimeout(() => {
+//     next();
+//   }, 4000);
+// });
+
 app.use("/", indexRouter);
 
 app.use((err, req, res, next) => {
