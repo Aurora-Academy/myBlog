@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import { publishedBlogs } from "../services/blogs";
 
-const useBlog = ({ title, page, limit }) => {
+const useBlog = ({ title, sort, page, limit }) => {
   // Replace this entire code with tanstack query
   const [data, setData] = useState([]);
   const [error, setError] = useState("");
@@ -13,7 +13,12 @@ const useBlog = ({ title, page, limit }) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const { data, msg } = await publishedBlogs({ title, page, limit });
+        const { data, msg } = await publishedBlogs({
+          title,
+          sort,
+          page,
+          limit,
+        });
         setMsg(msg);
         setData(data);
       } catch (e) {
@@ -28,7 +33,7 @@ const useBlog = ({ title, page, limit }) => {
       }
     };
     fetchData();
-  }, [title, limit, page]);
+  }, [title, limit, page, sort]);
 
   return { data, error, loading, msg };
 };

@@ -173,6 +173,27 @@ const getPublishedBlogs = async (search, page = 1, limit = 5) => {
       },
     });
   }
+  if (search?.sortBy) {
+    if (search?.sortBy === "alphabetical-z-a") {
+      query.push({
+        $sort: {
+          title: -1,
+        },
+      });
+    } else if (search?.sortBy === "latest") {
+      query.push({
+        $sort: {
+          createdAt: -1,
+        },
+      });
+    } else {
+      query.push({
+        $sort: {
+          title: 1,
+        },
+      });
+    }
+  }
   // pagination
   query.push(
     {

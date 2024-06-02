@@ -70,8 +70,8 @@ router.get("/my-blogs", checkRole(["user"]), async (req, res, next) => {
 
 router.get("/published-only", async (req, res, next) => {
   try {
-    const { page, limit, title, author } = req.query;
-    const search = { title, author };
+    const { page, limit, title, author, sortBy } = req.query;
+    const search = { title, author, sortBy };
     const result = await Controller.getPublishedBlogs(search, page, limit);
     res.json({ data: result });
   } catch (e) {

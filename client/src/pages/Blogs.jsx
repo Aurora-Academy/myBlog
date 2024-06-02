@@ -1,16 +1,47 @@
 import { Link } from "react-router-dom";
+
+import { useDebounce } from "../hooks/useDebounce";
 import { useBlogContext } from "../contexts/BlogContext";
 
 import LogoImg from "../assets/logo.png";
 import { BlogLoader } from "../components/Loader";
 import { dateFormatter } from "../utils/date";
+import { useEffect, useState } from "react";
+import { Pagination } from "../components/Pagination";
 
 const Blogs = () => {
-  const { blogs, loading, error, msg } = useBlogContext();
+  const [query, setQuery] = useState("");
+  const [sortBy, setSortBy] = useState("");
+  const {
+    blogs,
+    loading,
+    error,
+    msg,
+    setTitle,
+    setSort,
+    limit,
+    page,
+    setLimit,
+    setPage,
+  } = useBlogContext();
+
+  const { delayTerm } = useDebounce({ title: query, delay: 500 });
 
   const handleErrorImg = (e) => {
     e.target.src = LogoImg;
   };
+
+  useEffect(() => {
+    if (delayTerm) {
+      setTitle(delayTerm);
+      setSortBy("");
+      setSort("");
+    }
+    if (sortBy) {
+      setSort(sortBy);
+      setTitle("");
+    }
+  }, [setTitle, setSort, delayTerm, sortBy]);
 
   return (
     <>
@@ -25,14 +56,21 @@ const Blogs = () => {
               type="text"
               className="form-control"
               placeholder="Search by Blog Title"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
             />
           </div>
         </div>
         <div className="col-4">
           <div className="d-flex justify-content-end">
-            <select className="form-select" style={{ maxWidth: "200px" }}>
+            <select
+              className="form-select"
+              style={{ maxWidth: "200px" }}
+              onChange={(e) => setSortBy(e.target.value)}
+            >
+              <option value="alphabetical-a-z">Alphabetical (A to Z)</option>
               <option value="latest">Latest</option>
-              <option value="Alphabetical">Alphabetical</option>
+              <option value="alphabetical-z-a">Alphabetical (Z to A)</option>
             </select>
           </div>
         </div>
@@ -51,7 +89,7 @@ const Blogs = () => {
           blogs?.data.length > 0 &&
           blogs.data.map((blog) => {
             return (
-              <div key={blog?.slug} className="col-md-4">
+              <div key={blog?.slug} className="col-md-3">
                 <div className="card mb-3">
                   <img
                     src={blog?.pictureUrl}
@@ -89,46 +127,13 @@ const Blogs = () => {
           })}
       </div>
       {/* Pagination */}
-      <div className="row">
-        <div className="d-flex justify-content-center d-grid gap-2">
-          <ul className="pagination">
-            <select className="page-item">
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-            </select>
-          </ul>
-          <nav aria-label="Page navigation example">
-            <ul className="pagination">
-              <li className="page-item">
-                <Link className="page-link" to="#" aria-label="Previous">
-                  <span aria-hidden="true">&laquo;</span>
-                </Link>
-              </li>
-              <li className="page-item">
-                <Link className="page-link" to="#">
-                  1
-                </Link>
-              </li>
-              <li className="page-item">
-                <Link className="page-link" to="#">
-                  2
-                </Link>
-              </li>
-              <li className="page-item">
-                <Link className="page-link" to="#">
-                  3
-                </Link>
-              </li>
-              <li className="page-item">
-                <Link className="page-link" to="#" aria-label="Next">
-                  <span aria-hidden="true">&raquo;</span>
-                </Link>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
+      <Pagination
+        data={blogs}
+        limit={limit}
+        page={page}
+        setLimit={setLimit}
+        setPage={setPage}
+      />
     </>
   );
 };
