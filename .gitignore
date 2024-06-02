@@ -25,5 +25,6 @@ dist-ssr
 .env
 server/public/images/users/*
 server/public/images/blogs/*
+server/play
 
 
