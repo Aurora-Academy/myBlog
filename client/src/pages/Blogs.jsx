@@ -7,7 +7,8 @@ import LogoImg from "../assets/logo.png";
 import { BlogLoader } from "../components/Loader";
 import { dateFormatter } from "../utils/date";
 import { useEffect, useState } from "react";
-import { Pagination } from "../components/Pagination";
+
+import { Paginate } from "../components/Paginate";
 
 const Blogs = () => {
   const [query, setQuery] = useState("");
@@ -15,14 +16,16 @@ const Blogs = () => {
   const {
     blogs,
     loading,
-    error,
-    msg,
     setTitle,
     setSort,
+    error,
+    msg,
     limit,
-    page,
+    currentPage,
+    total,
     setLimit,
-    setPage,
+    setCurrentPage,
+    setTotal,
   } = useBlogContext();
 
   const { delayTerm } = useDebounce({ title: query, delay: 500 });
@@ -86,8 +89,8 @@ const Blogs = () => {
         )}
 
         {blogs &&
-          blogs?.data.length > 0 &&
-          blogs.data.map((blog) => {
+          blogs?.length > 0 &&
+          blogs.map((blog) => {
             return (
               <div key={blog?.slug} className="col-md-3">
                 <div className="card mb-3">
@@ -127,12 +130,12 @@ const Blogs = () => {
           })}
       </div>
       {/* Pagination */}
-      <Pagination
-        data={blogs}
+      <Paginate
+        total={total}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
         limit={limit}
-        page={page}
         setLimit={setLimit}
-        setPage={setPage}
       />
     </>
   );
