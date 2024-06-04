@@ -53,8 +53,9 @@ const UserNavbar = () => {
                 </Link>
               </div>
               <div className="btn-group p-1">
-                <Link className="btn btn-outline-light" to="/bookmarks">
+                <Link className="btn btn-secondary" to="/bookmarks">
                   <i className="fa fa-bookmark fa-lg"></i>
+                  <span className="badge badge-danger">0</span>
                 </Link>
               </div>
             </div>

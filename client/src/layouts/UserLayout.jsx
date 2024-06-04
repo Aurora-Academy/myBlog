@@ -7,7 +7,10 @@ const UserLayout = () => {
   return (
     <div>
       <UserNavbar />
-      <main className="container-fluid" style={{ height: "825px" }}>
+      <main
+        className="container-fluid overflow-auto"
+        style={{ height: "79vh" }}
+      >
         <Outlet />
       </main>
       <UserFooter />

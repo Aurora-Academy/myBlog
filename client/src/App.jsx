@@ -16,6 +16,7 @@ import BlogDetail from "./pages/BlogDetail";
 // Admin Pages
 import BlogList from "./pages/admin/blogs/List";
 import UserList from "./pages/admin/users/List";
+import { Bookmarks } from "./pages/Bookmarks";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="blogs" element={<Blogs />} />
           <Route path="blogs/:id" element={<BlogDetail />} />
+          <Route path="bookmarks" element={<Bookmarks />} />
           <Route path="contact" element={<Contact />} />
         </Route>
         {/* Admin Routes */}
