@@ -20,3 +20,38 @@ export const generateFPToken = (payload) => {
 export const verifyFPToken = (payload) => {
   return instance.post(APIs.USERS + "/verify-fp-token", payload);
 };
+
+export const getAllUsers = ({ limit, page, name }) => {
+  return instance.get(
+    `${APIs.USERS}?page=${page}&limit=${limit}&name=${name}`,
+    {
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    }
+  );
+};
+
+export const getOneUser = (id) => {
+  return instance.get(`${APIs.USERS}/${id}`, {
+    headers: {
+      access_token: localStorage.getItem("access_token"),
+    },
+  });
+};
+
+export const addUser = (payload) => {
+  return instance.post(APIs.USERS, payload, {
+    headers: {
+      access_token: localStorage.getItem("access_token"),
+    },
+  });
+};
+
+export const getProfile = () => {
+  return instance.get(`${APIs.USERS}/get-profile`, {
+    headers: {
+      access_token: localStorage.getItem("access_token"),
+    },
+  });
+};
