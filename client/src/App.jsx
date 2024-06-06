@@ -13,10 +13,13 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import Blogs from "./pages/Blogs";
 import BlogDetail from "./pages/BlogDetail";
+import { Bookmarks } from "./pages/Bookmarks";
 // Admin Pages
 import BlogList from "./pages/admin/blogs/List";
 import UserList from "./pages/admin/users/List";
-import { Bookmarks } from "./pages/Bookmarks";
+import Profile from "./pages/admin/users/Profile";
+
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -37,9 +40,38 @@ function App() {
         </Route>
         {/* Admin Routes */}
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<BlogList />} />
-          <Route path="blogs" element={<BlogList />} />
-          <Route path="users" element={<UserList />} />
+          <Route
+            index
+            element={
+              <PrivateRoute roles={["admin", "user"]}>
+                <BlogList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="blogs"
+            element={
+              <PrivateRoute roles={["admin", "user"]}>
+                <BlogList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="users"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <UserList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <PrivateRoute roles={["admin", "user"]}>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
         </Route>
         {/* Error Routing */}
         <Route path="*" element={<NotFound />} />

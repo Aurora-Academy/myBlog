@@ -8,6 +8,8 @@ const AdminNavbar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
+  const getUserInfo = JSON.parse(localStorage.getItem("currentUser"));
+
   const handleLogOut = () => {
     removeToken();
     navigate("/login");
@@ -65,14 +67,9 @@ const AdminNavbar = () => {
           <hr />
           <Dropdown>
             <Dropdown.Toggle variant="light">
-              <img
-                src="https://github.com/mdo.png"
-                alt=""
-                width="32"
-                height="32"
-                className="rounded-circle me-2"
-              />
-              <strong className="text-dark">mdo</strong>
+              <strong className="text-dark">
+                {getUserInfo?.name || "User"}
+              </strong>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>

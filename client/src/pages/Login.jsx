@@ -5,6 +5,7 @@ import Notify from "../components/Alert";
 
 import { login } from "../services/users";
 import { setToken, getToken } from "../utils/token";
+import { setCurrentUser } from "../utils/login";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -20,10 +21,12 @@ const Login = () => {
       const { data } = await login(payload);
       if (data?.data) {
         setToken(data.data);
-        navigate("/");
+        setCurrentUser();
+        navigate("/admin/blogs");
       }
     } catch (e) {
-      setError(e);
+      const error = e?.response?.data?.msg || "Login failed";
+      setError(error);
     } finally {
       setTimeout(() => {
         setError("");

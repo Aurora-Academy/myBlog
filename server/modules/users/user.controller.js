@@ -4,6 +4,7 @@ const { mail } = require("../../services/mailer");
 const { generateToken, generateRandomToken } = require("../../utils/token");
 // create
 const create = (payload) => {
+  payload.password = hashPassword(payload.password);
   return userModel.create(payload);
 };
 
