@@ -12,3 +12,7 @@ export const publishedBlogs = ({
       `/published-only?title=${title}&sortBy=${sort}&limit=${limit}&page=${page}`
   );
 };
+
+export const getBlogBySlug = (slug) => {
+  return instance.get(APIs.BLOGS + `/${slug}`);
+};

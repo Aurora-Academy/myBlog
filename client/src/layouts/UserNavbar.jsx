@@ -1,29 +1,21 @@
-import React from "react";
+import { useSelector } from "react-redux";
+import { Container, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import Logo from "../assets/logo.png";
 
 const UserNavbar = () => {
+  const { quantity } = useSelector((state) => state.cart);
   return (
     <div>
-      <nav
-        className="navbar bg-body-tertiary navbar-expand-lg"
-        data-bs-theme="dark"
-      >
-        <div className="container-fluid">
+      <Navbar expand="lg" className="bg-body-tertiary" data-bs-theme="dark">
+        <Container fluid>
           <Link className="navbar-brand" to="/">
             <img src={Logo} width="32" alt="Logo" className="img-fluid m-1" />
             Blogify
           </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarSupportedContent"
-          >
-            <span className="navbar-toggler-icon"></span>
-          </button>
-          <div className="collapse navbar-collapse">
+          <Navbar.Toggle aria-controls="navbarScroll" />
+          <Navbar.Collapse id="navbarScroll">
             <ul className="navbar-nav me-auto">
               <li className="nav-item">
                 <Link className="nav-link active" aria-current="page" to="/">
@@ -55,13 +47,13 @@ const UserNavbar = () => {
               <div className="btn-group p-1">
                 <Link className="btn btn-secondary" to="/bookmarks">
                   <i className="fa fa-bookmark fa-lg"></i>
-                  <span className="badge badge-danger">0</span>
+                  <span className="badge badge-danger">{quantity}</span>
                 </Link>
               </div>
             </div>
-          </div>
-        </div>
-      </nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
     </div>
   );
 };

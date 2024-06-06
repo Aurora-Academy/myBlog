@@ -6,16 +6,20 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App.jsx";
 import { BlogContextProvider } from "./contexts/BlogContext";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import { newStore, store } from "./store";
+
+import { PersistGate } from "redux-persist/integration/react";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <BlogContextProvider>
-          <App />
-        </BlogContextProvider>
-      </BrowserRouter>
+      <PersistGate loading={null} persistor={newStore}>
+        <BrowserRouter>
+          <BlogContextProvider>
+            <App />
+          </BlogContextProvider>
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );

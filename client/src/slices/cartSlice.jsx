@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import moment from "moment";
 
 const initialState = {
   cart: [],
@@ -17,7 +18,10 @@ const cartSlice = createSlice({
       );
       // if item exist
       if (!existingItem) {
-        state.cart.push({ ...action.payload });
+        state.cart.push({
+          ...action.payload,
+          addedTime: moment().format("lll"),
+        });
         state.quantity++;
       }
     },
