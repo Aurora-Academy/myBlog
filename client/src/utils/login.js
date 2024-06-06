@@ -13,6 +13,7 @@ export const isLoggedIn = () => {
     if (now < expDate) return true;
     return false;
   } catch (e) {
+    localStorage.removeItem("access_token");
     return false;
   }
 };
@@ -27,6 +28,7 @@ export const isValidRoles = (roles = []) => {
     if (!isValid) return false;
     return true;
   } catch (e) {
+    localStorage.removeItem("access_token");
     return false;
   }
 };
