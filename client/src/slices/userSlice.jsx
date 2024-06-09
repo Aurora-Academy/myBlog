@@ -4,6 +4,7 @@ import {
   getAllUsers,
   getOneUser,
   addUser,
+  blockUser,
 } from "../services/users";
 
 const initialState = {
@@ -44,6 +45,24 @@ export const userProfile = createAsyncThunk("users/userProfile", async () => {
   return res.data;
 });
 
+// user block
+export const changeStatus = createAsyncThunk(
+  "users/changeStatus",
+  async (email) => {
+    const res = await blockUser(email);
+    return res.data;
+  }
+);
+// update user
+export const updateUser = createAsyncThunk("users/updateUser", async () => {
+  const res = await getProfile(); // TODO
+  return res.data;
+});
+
+// change password
+// reset password
+// delete user
+
 const userSlice = createSlice({
   initialState,
   name: "users",
@@ -74,7 +93,7 @@ const userSlice = createSlice({
       })
       .addCase(createUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.data;
+        state.users.push(action.payload.data);
       })
       .addCase(createUser.pending, (state) => {
         state.loading = true;
@@ -105,6 +124,34 @@ const userSlice = createSlice({
         state.profile = {};
       })
       .addCase(userProfile.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(changeStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        const existing = state.users.find(
+          (user) => user.email === action.payload.data.data.email
+        );
+        existing.isActive = action.payload.data.data.isActive;
+      })
+      .addCase(changeStatus.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(changeStatus.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        const existing = state.users.filter(
+          (user) => user.email !== action.payload.data.email
+        );
+        state.users = [...existing, action.payload.data];
+      })
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

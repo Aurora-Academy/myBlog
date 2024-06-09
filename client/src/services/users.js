@@ -55,3 +55,17 @@ export const getProfile = () => {
     },
   });
 };
+
+export const blockUser = (email) => {
+  return instance.patch(
+    `${APIs.USERS}/block-user`,
+    {
+      email,
+    },
+    {
+      headers: {
+        access_token: localStorage.getItem("access_token"),
+      },
+    }
+  );
+};

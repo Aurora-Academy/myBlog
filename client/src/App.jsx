@@ -20,6 +20,8 @@ import UserList from "./pages/admin/users/List";
 import Profile from "./pages/admin/users/Profile";
 
 import PrivateRoute from "./components/PrivateRoute";
+import UserDetail from "./pages/admin/users/Detail";
+import UserAdd from "./pages/admin/users/Add";
 
 function App() {
   return (
@@ -61,6 +63,22 @@ function App() {
             element={
               <PrivateRoute roles={["admin"]}>
                 <UserList />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="users/add"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <UserAdd />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="users/:id"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <UserDetail />
               </PrivateRoute>
             }
           />

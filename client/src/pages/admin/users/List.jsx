@@ -1,14 +1,40 @@
-import React from "react";
+import { useCallback, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  listUsers,
+  changeStatus,
+  setCurrentPage,
+  setLimit,
+} from "../../../slices/userSlice";
+import { Paginate } from "../../../components/Paginate";
 
 const List = () => {
+  const dispatch = useDispatch();
+  const { users, currentPage, limit, loading, total } = useSelector(
+    (state) => state.users
+  );
+
+  const initFetch = useCallback(() => {
+    dispatch(listUsers({ limit, page: currentPage, name: "" }));
+  }, [dispatch, currentPage, limit]);
+
+  const handleStatus = async (e, email) => {
+    e.preventDefault();
+    dispatch(changeStatus(email));
+  };
+
+  useEffect(() => {
+    initFetch();
+  }, [initFetch]);
   return (
     <>
       <div className="container mt-5 d-grid gap-4">
         <div className="d-flex justify-content-between">
           <h2>Users</h2>
-          <button className="btn btn-dark">
+          <Link to="/admin/users/add" className="btn btn-dark">
             <i className="fa fa-plus"></i>&nbsp;New User
-          </button>
+          </Link>
         </div>
         <div className="d-flex">
           <div className="card w-100 shadow">
@@ -17,111 +43,107 @@ const List = () => {
                 <thead className="table-secondary">
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Author</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
                     <th scope="col">Status</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td rowSpan="1">
-                      How to be a super good and efficient developer? Part 20
-                    </td>
-                    <td>Raktim Shrestha</td>
-                    <td>
-                      <div className="d-flex align-self-start">
-                        <label className="form-check-label">Draft&nbsp;</label>
-                        <div className="form-check form-switch">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            role="switch"
-                            id="flexSwitchCheckDefault"
-                          />
-                          <label className="form-check-label">Published</label>
+                  {loading && users.length === 0 && (
+                    <tr>
+                      <th scope="row" className="placeholder-glow">
+                        <span className="placeholder col-9"></span>
+                      </th>
+                      <td className="placeholder-glow">
+                        <span className="placeholder col-9"></span>
+                      </td>
+                      <td className="placeholder-glow">
+                        <span className="placeholder col-9"></span>
+                      </td>
+                      <td>
+                        <div className="d-flex align-self-start">
+                          <label className="form-check-label">
+                            Draft&nbsp;
+                          </label>
+                          <div className="form-check form-switch">
+                            <input
+                              className="form-check-input"
+                              type="checkbox"
+                              role="switch"
+                              id="flexSwitchCheckDefault"
+                            />
+                            <label className="form-check-label">
+                              Published
+                            </label>
+                          </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <button className="btn btn-custom">
-                        <i className="fa fa-eye"></i>
-                      </button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row" className="placeholder-glow">
-                      <span className="placeholder col-9"></span>
-                    </th>
-                    <td className="placeholder-glow">
-                      <span className="placeholder col-9"></span>
-                    </td>
-                    <td className="placeholder-glow">
-                      <span className="placeholder col-9"></span>
-                    </td>
-                    <td>
-                      <div className="d-flex align-self-start">
-                        <label className="form-check-label">Draft&nbsp;</label>
-                        <div className="form-check form-switch">
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            role="switch"
-                            id="flexSwitchCheckDefault"
-                          />
-                          <label className="form-check-label">Published</label>
-                        </div>
-                      </div>
-                    </td>
-                    <td>
-                      <button className="btn btn-custom">
-                        <i className="fa fa-eye"></i>
-                      </button>
-                    </td>
-                  </tr>
+                      </td>
+                      <td>
+                        <button className="btn btn-custom">
+                          <i className="fa fa-eye"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  )}
+                  {users && users.length > 0 ? (
+                    users.map((user, index) => {
+                      return (
+                        <tr key={user?._id}>
+                          <th scope="row">{index + 1}</th>
+                          <td rowSpan="1">{user?.name}</td>
+                          <td>{user?.email}</td>
+                          <td>
+                            <div className="d-flex align-self-start">
+                              <label className="form-check-label">
+                                Blocked&nbsp;
+                              </label>
+                              <div className="form-check form-switch">
+                                <input
+                                  className="form-check-input"
+                                  checked={user?.isActive}
+                                  type="checkbox"
+                                  role="switch"
+                                  onChange={(e) => handleStatus(e, user?.email)}
+                                />
+                                <label className="form-check-label">
+                                  Active
+                                </label>
+                              </div>
+                            </div>
+                          </td>
+                          <td>
+                            <Link
+                              to={`/admin/users/${user?._id}`}
+                              className="btn btn-custom"
+                            >
+                              <i className="fa fa-eye"></i>
+                            </Link>
+                            <button className="btn btn-custom">
+                              <i className="fa fa-trash text-danger"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan={5} className="text-center">
+                        No Data Found
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
             <div className="row">
-              <div className="d-flex justify-content-center d-grid gap-2">
-                <ul className="pagination">
-                  <select className="page-item">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                  </select>
-                </ul>
-                <nav aria-label="Page navigation example">
-                  <ul className="pagination pagination-sm">
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        1
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        2
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#">
-                        3
-                      </a>
-                    </li>
-                    <li className="page-item">
-                      <a className="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                      </a>
-                    </li>
-                  </ul>
-                </nav>
-              </div>
+              <Paginate
+                total={total}
+                limit={limit}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                setLimit={setLimit}
+              />
             </div>
           </div>
         </div>

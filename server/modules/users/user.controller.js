@@ -3,9 +3,11 @@ const { hashPassword, comparePassword } = require("../../utils/bcrypt");
 const { mail } = require("../../services/mailer");
 const { generateToken, generateRandomToken } = require("../../utils/token");
 // create
-const create = (payload) => {
+const create = async (payload) => {
   payload.password = hashPassword(payload.password);
-  return userModel.create(payload);
+  const user = await userModel.create(payload);
+  delete user.password;
+  return user;
 };
 
 // Read Part 1
@@ -42,6 +44,12 @@ const list = async (search, page = 1, limit = 1) => {
         total: {
           $arrayElemAt: ["$metadata.total", 0],
         },
+      },
+    },
+    {
+      $project: {
+        metadata: 0,
+        "data.password": 0,
       },
     }
   );
@@ -164,9 +172,16 @@ const blockUser = async (payload) => {
   const user = await userModel.findOne({ email });
   if (!user) throw new Error("User not found");
   const status = { isActive: !user?.isActive };
-  const updateUser = await userModel.updateOne({ email }, status);
+  const updateUser = await userModel
+    .findOneAndUpdate({ email }, status, {
+      new: true,
+    })
+    .select("-password");
   if (!updateUser) throw new Error("Try again later.");
-  return `User ${status?.isActive ? "unblocked" : "blocked"} Successfully`;
+  return {
+    msg: `User ${status?.isActive ? "unblocked" : "blocked"} Successfully`,
+    data: updateUser,
+  };
 };
 
 const getProfile = (_id) => {

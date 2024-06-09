@@ -73,7 +73,7 @@ const AdminNavbar = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">Profile</Dropdown.Item>
+              <Dropdown.Item href="/admin/profile">Profile</Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item onClick={handleLogOut}>Sign Out</Dropdown.Item>
             </Dropdown.Menu>

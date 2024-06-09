@@ -34,6 +34,7 @@ export const store = configureStore({
         ignoreActions: [FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE],
       },
     }),
+  devTools: true,
 });
 
 export const newStore = persistStore(store);
